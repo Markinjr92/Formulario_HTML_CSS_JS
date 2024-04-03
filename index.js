@@ -35,36 +35,36 @@ let participantes = [
       dataPagamentoInsc: new Date(2003, 0, 3, 19, 23)
     },
     {
-      nome: "Pedro Santos",
-      email: "pedro@gmail.com",
+      nome: "Mario Hugo",
+      email: "mario@gmail.com",
       dataNascimento: new Date(2006, 9, 6, 19, 23),
       cep: '66666-666',
       dataPagamentoInsc: new Date(2003, 0, 3, 19, 23)
     },
     {
-      nome: "Carla Lima",
-      email: "carla@gmail.com",
+      nome: "Leandro Santos",
+      email: "leandro@gmail.com",
       dataNascimento: new Date(2007, 8, 7, 19, 23),
       cep: '77777-777',
       dataPagamentoInsc: null
     },
     {
-      nome: "Lucas Sousa",
-      email: "lucas@gmail.com",
+      nome: "Fabiano Bispo",
+      email: "fabiano@gmail.com",
       dataNascimento: new Date(2008, 7, 8, 19, 23),
       cep: '88888-888',
       dataPagamentoInsc: null
     },
     {
-      nome: "Paula Costa",
-      email: "paula@gmail.com",
+      nome: "Marcelo Coelho",
+      email: "marcelo@gmail.com",
       dataNascimento: new Date(2009, 6, 9, 19, 23),
       cep: '99999-999',
       dataPagamentoInsc: null
     },
     {
-      nome: "Gabriel Almeida",
-      email: "gabriel@gmail.com",
+      nome: "Luismar Sombra",
+      email: "sombra@gmail.com",
       dataNascimento: new Date(2000, 5, 10, 19, 23),
       cep: '00000-000',
       dataPagamentoInsc: null
@@ -77,12 +77,12 @@ let participantes = [
     if(participante.dataPagamentoInsc == null) {
       dataPagamentoInsc = `
       <button
-      data-email="${participante.email}"
-      onClick="confirmarPagamento"(event)"
+        data-email="${participante.email}"
+        onclick="confirmarPagamento(event)"
       >
-        Confirmar Pagamento
+        Confirmar pagamento
       </button>
-      `
+    `
     }
 
     return `
@@ -108,10 +108,13 @@ let participantes = [
     for(let participante of participantes) {
       output = output + criarNovoParticipante(participante)
     }
+  
     document
     .querySelector('tbody')
     .innerHTML = output
   }
+  
+  atualizarLista(participantes)
   
   const adicionarParticipante = (event) => {
     event.preventDefault()
@@ -123,16 +126,33 @@ let participantes = [
       cep: dados.get('cep'),
       dataPagamento: null
     }
-    participantes = [participante, ...participantes]
-    atualizarLista(participantes)
-  }
-  const confirmarPagamento = (event) => {
-    if(confirm('Tem certeza que deseja fazer o checkin?') = false) {
+
+    const participanteExiste = participantes.find(
+      (p) => p.email == participante.email
+    )
+  
+    if(participanteExiste) {
+      alert('Email já cadastrado!')
       return
     }
-    const participante = participantes.find((p) => {
-      return p.email == event.target.dataset.email
-    })
+
+    participantes = [participante, ...participantes]
+    atualizarLista(participantes)
+    
+    event.target.querySelector('[name="nome"]').value = ""
+    event.target.querySelector('[name="email"]').value = ""
+    event.target.querySelector('[name="dataNascimento"]').value = ""
+    event.target.querySelector('[name="cep"]').value = ""
+  }
+  const confirmarPagamento = (event) => {
+    const mensagemConfirmacao = 'Tem certeza que deseja fazer a confirmação?' 
+
+    if(confirm(mensagemConfirmacao) == false) {
+      return
+    }
+    const participante = participantes.find(
+      (p) => p.email == event.target.dataset.email  
+    )
     participante.dataPagamentoInsc = new Date()
     atualizarLista(participantes)
   } 
